@@ -144,12 +144,12 @@ public class ServiceMetier {
 
             System.out.println(jsonOutputClientListe);
             // 2. Obtenir les idPersonnes
-            JsonArray outputPersonnes = new JsonArray();
+            
             for (JsonElement e : jsonOutputClientListe.getAsJsonArray()) {
+                JsonArray outputPersonnes = new JsonArray();
+                JsonObject client = e.getAsJsonObject();
 
-                JsonObject personne = e.getAsJsonObject();
-
-                JsonArray personnesID = personne.get("personnes-ID").getAsJsonArray();
+                JsonArray personnesID = client.get("personnes-ID").getAsJsonArray();
 
                 
                   
@@ -158,7 +158,7 @@ public class ServiceMetier {
                     JsonObject personneContainer = new JsonObject();
                     try {
                         personneContainer = this.jsonHttpClient.post(
-                        this.somClientUrl,
+                        this.somPersonneUrl,
                         new JsonHttpClient.Parameter("SOM", "rechercherPersonneParId"),
                         new JsonHttpClient.Parameter("id-personne", personneID.getAsString())
                         );
@@ -168,11 +168,13 @@ public class ServiceMetier {
                     }
                     outputPersonnes.add( personneContainer);
                 }
+                
+                client.add("personnes", outputPersonnes);
             }
 
             // 5. Ajouter la liste de Clients au conteneur JSON
 
-            this.container.add("personnes", outputPersonnes);
+            this.container.add("personnes", jsonOutputClientListe);
             
 
         } catch (Exception ex) {

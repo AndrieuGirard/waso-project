@@ -64,7 +64,7 @@ public class ServiceObjetMetierServlet extends HttpServlet {
 
                 service.getListePersonne();
 
-            } else if ("getPersonneParId".equals(som)) {
+            } else if ("rechercherPersonneParId".equals(som)) {
 
                 String idPersonneParametre = request.getParameter("id-personne");
                 if (idPersonneParametre == null) {
