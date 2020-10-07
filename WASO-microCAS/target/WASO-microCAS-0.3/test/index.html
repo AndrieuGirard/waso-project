@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>μCAS - Page de Test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <style>
+            h1 {
+                text-align: center;
+            }
+            p {
+                font-size: 20px;
+                margin: 40px 40px;
+                text-align: center;
+            }
+            p#output {
+                border: 2px dashed darkblue;
+                border-radius: 20px;
+                padding: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>μCAS &ndash; Page de Test</h1>
+        <p id="output">
+            Test de Session...
+        </p>
+        <p>
+            Recharger la Page &rAarr; <a href="./">cliquer ici</a>
+            <br/>
+            Déconnexion CAS &rAarr; <a href="./?CAS:reset">cliquer ici</a>
+        </p>
+        <script>
+
+            function escapeHtml(text) {
+                var map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                };
+
+                return text.replace(/[&<>"']/g, function (m) {
+                    return map[m];
+                });
+            }
+
+            var xmlhttp = new XMLHttpRequest();
+            var url = './service?action=test';
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    var data = JSON.parse(xmlhttp.responseText);
+                    onRequestResult(data);
+                } else if (xmlhttp.readyState === 4) {
+                    onRequestError(xmlhttp.status, xmlhttp.responseText);
+                }
+            };
+            xmlhttp.open("POST", url, true);
+            xmlhttp.send();
+
+            function onRequestResult(data) {
+                //console.log('Request Result:',data);
+                var session = data.session;
+                if (data.nosession) {
+                    document.getElementById('output').innerHTML = 'No Session...';
+                } else {
+                    document.getElementById('output').innerHTML = 'Session: <code>' + escapeHtml(session.login) + '</code> (' + escapeHtml(session.description.description) + ')';
+                }
+            }
+
+            function onRequestError(status, text) {
+                //console.log('HTTP Error ' + status + ' -- ' + text);
+                document.getElementById('output').innerHTML = 'Error loading data... (' + escapeHtml(status) + ')';
+            }
+        </script>
+    </body>
+</html>

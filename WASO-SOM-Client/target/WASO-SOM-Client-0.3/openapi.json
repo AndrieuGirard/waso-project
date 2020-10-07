@@ -1,0 +1,356 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Bloc Client",
+        "description": "Ceci est l'API du Bloc Client, avec les différents SOM disponibles.",
+        "version": "0.1.0"
+    },
+    "servers": [
+        {
+            "url": "/WASO-SOM-Client/ServiceObjetMetier",
+            "description": "Servlet des SOM du Bloc Client"
+        }
+    ],
+    "tags": [
+        {
+            "name": "SOM Bloc Client",
+            "description": "Ensemble des Services Objet Métier (SOM) du Bloc Client"
+        }
+    ],
+    "paths": {
+        "/getListeClient": {
+            "get": {
+                "summary": "SOM getListeClient",
+                "description": "Renvoie la liste de tous les Clients.",
+                "tags": ["SOM Bloc Client"],
+                "responses": {
+                    "200": {
+                        "description": "Un objet JSON contenant un tableau de Clients",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Container:Clients"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rechercherClientParNumero": {
+            "get": {
+                "summary": "SOM rechercherClientParNumero",
+                "description": "Renvoie la liste des Clients dont le numéro correspond au critère fourni.",
+                "tags": ["SOM Bloc Client"],
+                "parameters": [
+                    {
+                        "name": "numero",
+                        "in": "query",
+                        "required": true,
+                        "description": "Numéro recherché.",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Un objet JSON contenant un tableau de Clients",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Container:Clients"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rechercherClientParDenomination": {
+            "get": {
+                "summary": "SOM rechercherClientParDenomination",
+                "description": "Renvoie la liste des Clients dont la dénomination correspond au critère fourni. La ville des Clients peut également être précisée.",
+                "tags": ["SOM Bloc Client"],
+                "parameters": [
+                    {
+                        "name": "denomination",
+                        "in": "query",
+                        "required": true,
+                        "description": "Dénomination recherchée.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ville",
+                        "in": "query",
+                        "required": false,
+                        "description": "Ville recherchée, peut être vide",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "default": ""
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Un objet JSON contenant un tableau de Clients",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Container:Clients"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rechercherClientParPersonne": {
+            "get": {
+                "summary": "SOM rechercherClientParPersonne",
+                "description": "Renvoie la liste des Clients dont les Personnes indiquées font partie. La ville des Clients peut également être précisée.",
+                "tags": ["SOM Bloc Client"],
+                "parameters": [
+                    {
+                        "name": "personnes",
+                        "in": "query",
+                        "required": true,
+                        "description": "Identifiants des Personnes, séparés par des virgules.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "minimum": 0
+                            }
+                        },
+                        "style": "form",
+                        "explode": false
+                    },
+                    {
+                        "name": "ville",
+                        "in": "query",
+                        "required": false,
+                        "description": "Ville recherchée, peut être vide",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "default": ""
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Un objet JSON contenant un tableau de Clients",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Container:Clients"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/getClientParNumero": {
+            "get": {
+                "summary": "SOM getClientParNumero",
+                "description": "Renvoie le détail du Client identifié par le numéro fourni.",
+                "tags": ["SOM Bloc Client"],
+                "parameters": [
+                    {
+                        "name": "numero",
+                        "in": "query",
+                        "required": true,
+                        "description": "Numéro du Client.",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Un objet JSON contenant la description du Client",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Container:Client"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/updateClient": {
+            "post": {
+                "summary": "SOM updateClient",
+                "description": "Met à jour le détail du Client identifié par le numéro fourni.",
+                "tags": ["SOM Bloc Client"],
+                "parameters": [
+                    {
+                        "name": "numero",
+                        "in": "query",
+                        "required": true,
+                        "description": "Numéro du Client.",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "denomination",
+                        "in": "query",
+                        "required": true,
+                        "description": "Nouvelle dénomination du Client.",
+                        "schema": {
+                            "type": "string",
+                            "minLength": 3,
+                            "maxLength": 250
+                        }
+                    },
+                    {
+                        "name": "adresse",
+                        "in": "query",
+                        "required": true,
+                        "description": "Nouvelle adresse du Client.",
+                        "schema": {
+                            "type": "string",
+                            "minLength": 3,
+                            "maxLength": 250
+                        }
+                    },
+                    {
+                        "name": "ville",
+                        "in": "query",
+                        "required": true,
+                        "description": "Nouvelle ville du Client.",
+                        "schema": {
+                            "type": "string",
+                            "minLength": 3,
+                            "maxLength": 250
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Un objet JSON contenant le statut (succès ou échec) de la mise à jour du détail du Client",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Container:Status"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Detail:Client": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "example": 174210001
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": ["P", "M"],
+                        "example": "P|M"
+                    },
+                    "denomination": {
+                        "type": "string"
+                    },
+                    "adresse": {
+                        "type": "string"
+                    },
+                    "ville": {
+                        "type": "string"
+                    },
+                    "agent-ID": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "agence-ID": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "personnes-ID": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "example": 2018
+                        }
+                    }
+                }
+            },
+            "Item:Client": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "example": 174210001
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": ["P", "M"],
+                        "example": "P|M"
+                    },
+                    "denomination": {
+                        "type": "string"
+                    },
+                    "adresse": {
+                        "type": "string"
+                    },
+                    "ville": {
+                        "type": "string"
+                    },
+                    "personnes-ID": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "example": 2018
+                        }
+                    }
+                }
+            },
+            "Container:Clients": {
+                "type": "object",
+                "properties": {
+                    "clients": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Item:Client"
+                        }
+                    }
+                }
+            },
+            "Container:Client": {
+                "type": "object",
+                "properties": {
+                    "client": {
+                        "$ref": "#/components/schemas/Detail:Client"
+                    }
+                }
+            },
+            "Container:Status": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "boolean"
+                    }
+                }
+            }
+        }
+    }
+}

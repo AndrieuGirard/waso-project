@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Embedded Swagger UI</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="./swagger_fav.png" type="image/png" rel="shortcut icon"/>
+        <!-- <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3.19.0/swagger-ui.css"> -->
+        <link rel="stylesheet" type="text/css" href="./CDN_3.19.0_swagger-ui.css">
+        <script>
+            var OPENAPI_DESCRIPTION_URL = '../openapi.json';
+        </script>
+    </head>
+    <body>
+        <!-- DIV for Swagger UI -->
+        <div id="swagger-ui"></div>
+
+        <!-- <script src="https://unpkg.com/swagger-ui-dist@3.19.0/swagger-ui-standalone-preset.js"></script> -->
+        <!-- <script src="https://unpkg.com/swagger-ui-dist@3.19.0/swagger-ui-bundle.js"></script> -->
+        <script src="./CDN_3.19.0_swagger-ui-standalone-preset.js"></script>
+        <script src="./CDN_3.19.0_swagger-ui-bundle.js"></script>
+
+        <script>
+            window.onload = function () {
+                // Build Swagger UI
+                const ui = SwaggerUIBundle({
+                    //url: "https://petstore.swagger.io/v2/swagger.json",
+                    url: OPENAPI_DESCRIPTION_URL,
+                    dom_id: '#swagger-ui',
+                    deepLinking: true,
+                    presets: [
+                        SwaggerUIBundle.presets.apis,
+                        SwaggerUIStandalonePreset
+                    ],
+                    plugins: [
+                        SwaggerUIBundle.plugins.DownloadUrl
+                    ],
+                    layout: "StandaloneLayout"
+                });
+                window.ui = ui;
+            };
+        </script>
+    </body>
+</html>
