@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 //@WebServlet(name = "ServiceObjetMetierServlet", urlPatterns = {"/ServiceObjetMetier"})
 public class ServiceObjetMetierServlet extends HttpServlet {
+    //Erwan
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
