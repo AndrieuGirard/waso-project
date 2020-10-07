@@ -119,5 +119,65 @@ public class ServiceMetier {
             throw JsonServletHelper.ServiceMetierExecutionException("getListeClient", ex);
         }
     }
+    
+    
+     public void rechercherClientParDenomination(String denomination,String ville) throws ServiceException {
+        try {
+
+            // 1. Obtenir la liste des Clients
+            
+            
+            JsonObject clientContainer = null;
+            try {
+                clientContainer = this.jsonHttpClient.post(
+                        this.somClientUrl,
+                        new JsonHttpClient.Parameter("SOM", "rechercherClientParDenomination"),
+                        new JsonHttpClient.Parameter("denom", denomination),
+                        new JsonHttpClient.Parameter("city", ville)
+                );
+            }
+            catch (ServiceIOException ex) {
+                throw JsonServletHelper.ServiceObjectMetierCallException(this.somClientUrl, "Client", "getListeClient", ex);
+            }
+
+            JsonArray jsonOutputClientListe = clientContainer.getAsJsonArray("clients");
+
+            System.out.println(jsonOutputClientListe);
+            // 2. Obtenir les idPersonnes
+            JsonArray outputPersonnes = new JsonArray();
+            for (JsonElement e : jsonOutputClientListe.getAsJsonArray()) {
+
+                JsonObject personne = e.getAsJsonObject();
+
+                JsonArray personnesID = personne.get("personnes-ID").getAsJsonArray();
+
+                
+                  
+                for (JsonElement personneID : personnesID) {
+                
+                    JsonObject personneContainer = new JsonObject();
+                    try {
+                        personneContainer = this.jsonHttpClient.post(
+                        this.somClientUrl,
+                        new JsonHttpClient.Parameter("SOM", "rechercherPersonneParId"),
+                        new JsonHttpClient.Parameter("id-personne", personneID.getAsString())
+                        );
+                    }
+                    catch (ServiceIOException ex) {
+                        throw JsonServletHelper.ServiceObjectMetierCallException(this.somClientUrl, "Client", "getListeClient", ex);
+                    }
+                    outputPersonnes.add( personneContainer);
+                }
+            }
+
+            // 5. Ajouter la liste de Clients au conteneur JSON
+
+            this.container.add("personnes", outputPersonnes);
+            
+
+        } catch (Exception ex) {
+            throw JsonServletHelper.ServiceMetierExecutionException("rechercherClientParDenomination", ex);
+        }
+    }
 
 }
