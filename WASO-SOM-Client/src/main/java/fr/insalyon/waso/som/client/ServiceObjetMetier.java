@@ -64,7 +64,8 @@ public class ServiceObjetMetier {
         try {
             JsonArray jsonListe = new JsonArray();
             String filtre = (ville!=null)? "AND Ville='"+ville+"'" : "";
-            List<Object[]> listeClients = this.dBConnection.launchQuery("SELECT ClientID, TypeClient, Denomination, Adresse, Ville FROM CLIENT WHERE Denomination ='"+denomination+"' "+filtre);
+            denomination = "%"+denomination+"%";
+            List<Object[]> listeClients = this.dBConnection.launchQuery("SELECT ClientID, TypeClient, Denomination, Adresse, Ville FROM CLIENT WHERE Denomination LIKE ?"+filtre, denomination);
 
             for (Object[] row : listeClients) {
                 JsonObject jsonItem = new JsonObject();
