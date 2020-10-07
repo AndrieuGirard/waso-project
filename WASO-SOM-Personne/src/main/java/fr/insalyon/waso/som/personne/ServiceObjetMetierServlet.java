@@ -72,7 +72,7 @@ public class ServiceObjetMetierServlet extends HttpServlet {
                 }
                 Integer idPersonne = Integer.parseInt(idPersonneParametre);
 
-                // service.getPersonneParId(idPersonne);
+                 service.rechercherPersonneParId(idPersonne);
 
             } else if ("rechercherPersonneParNom".equals(som)) {
                 String nomPersonne = request.getParameter("nom-personne");
